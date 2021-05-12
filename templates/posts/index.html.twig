@@ -3,7 +3,8 @@
 {% block title %}{% endblock %}
 
 {% block body %}
-
+    <p><a href="{{ path('new_blog_post')}}">Добавить пост</a></p>
+    
     {% for post in posts %}
         <p>
             <a href="{{ path('blog_show', {'slug': post.slug}) }}">{{ post.title }}</a>
