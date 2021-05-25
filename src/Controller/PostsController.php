@@ -28,9 +28,12 @@ class PostsController extends AbstractController
      * */
     public function posts()
     {
-        $repo = $this->getDoctrine()->getRepository(Post::class);
+        // Первый способ вывода записей без внедрения PostRepository через конструктор
+         $repo = $this->getDoctrine()->getRepository(Post::class);
+         $posts = $repo->findAll();
 
-        $posts = $repo->findAll();
+        // Второй способ вывода записей через внедрение PostRepository
+//        $posts = $this->postRepository->findAll();
 
         return $this->render('posts/index.html.twig', [
             'posts' => $posts
@@ -57,6 +60,7 @@ class PostsController extends AbstractController
             $em->flush();
         };
 
+//        Возврат JSON в качестве ответа экшена
 //        return new Response (json_encode(['message' => 'success']), 200);
 
         return $this->render('posts/new.html.twig', [
@@ -67,10 +71,10 @@ class PostsController extends AbstractController
     /**
      * @route("/posts/{slug}/edit", name="blog_post_edit")
      * */
-    public function edit(Post $post, Request $reqouest, Slugify $slugify)
+    public function edit(Post $post, Request $request, Slugify $slugify)
     {
         $form = $this->createForm(PostType::class, $post);
-        $form->handleRequest($reqouest);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug($slugify->slugify($post->getTitle()));
@@ -99,6 +103,19 @@ class PostsController extends AbstractController
         return $this->redirectToRoute('blog_posts');
     }
 
+    /**
+     * @Route("/posts/search", name="blog_search")
+     * */
+    public function search(Request $request)
+    {
+        $query = $request->query->get('queue');
+        $posts = $this->postRepository->searchByQuery($query);
+
+        return $this->render('posts/query_post.html.twig', [
+            'posts' => $posts
+        ]);
+
+    }
 
 
     /**

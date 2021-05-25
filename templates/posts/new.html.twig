@@ -1,12 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <p><a href="{{ path('blog_posts')}}">Вернуться к постаам</a></p>
+{#    <link rel="stylesheet" href="{{ asset('build/vendors~css/app.css') }}">#}
+{#    <script src="{{ asset('build/js/app.js') }}"></script>#}
+    <p><a href="{{ path('blog_posts')}}">< Вернуться к постам</a></p>
     {{ form_start(form) }}
     {{ form_row(form.title) }}
     {{ form_row(form.body, { 'attr': {
         'rows' : '10',
         'cols' : '10'}}) }}
-    <button class="btn btn-default" type="submit">Сохранить</button>
+    <button class="btn btn-success" type="submit">Сохранить</button>
     {{ form_end(form) }}
 {% endblock %}

@@ -27,9 +27,9 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-#   Убрал в пятом уроке
-#    App\DataFixtures\AppFixtures:
-#        $slugify: 'Cocur\Slugify\Slugify'
+####   Убрал в пятом уроке
+####   App\DataFixtures\AppFixtures:
+####   $slugify: 'Cocur\Slugify\Slugify'
 
     Cocur\Slugify\Slugify:
         autowire: true

@@ -3,8 +3,15 @@
 {% block title %}{% endblock %}
 
 {% block body %}
-    <p><a href="{{ path('new_blog_post')}}">Добавить пост</a></p>
-    
+    <p><a class="btn btn-success" href="{{ path('new_blog_post') }}">Добавить пост</a></p>
+
+    <div>
+        <form class="form-inline my-2 my-lg-0" action="{{ path('blog_search') }}" method="get">
+            <input class="form-control mr-sm-2" type="search" aria-label="Search" name="queue">
+            <button class="btn btn-primary my-2 my-sm-0" type="submit">Найти</button>
+        </form>
+    </div>
+
     {% for post in posts %}
         <p>
             <a href="{{ path('blog_show', {'slug': post.slug}) }}">{{ post.title }}</a>
