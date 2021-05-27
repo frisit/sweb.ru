@@ -15,37 +15,33 @@ use Symfony\Component\Validator\Constraints as Assert;
  * */
 class User implements UserInterface
 {
+    public const ROLE_USER = 'ROLE_USER';
+
     /**
-     * @var int
-     *
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
-     * */
+     */
     private $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
      * */
-    private $email;
+    private $email = '';
 
     /**
-     * @var string
-     *
      * @ORM\Column(type="string")
      * */
-    private $password;
+    private $password = '';
 
     /**
      * @var string
      *
      * @Assert\NotBlank()
      * */
-    private $plainPassword;
+    private $plainPassword = '';
 
     /**
      * @var array
@@ -53,6 +49,30 @@ class User implements UserInterface
      * @ORM\Column(type="json")
      * */
     private $roles = [];
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     * */
+    private $confirmationCode;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(type="boolean")
+     * */
+    private $enabled;
+
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->roles = [self::ROLE_USER];
+        $this->enabled = false;
+    }
 
 
     /**
@@ -64,7 +84,6 @@ class User implements UserInterface
             'ROLE_USER'
         ];
     }
-
 
     /**
      * @param $roles
@@ -166,7 +185,45 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getConfirmationCode(): string
+    {
+        return $this->confirmationCode;
+    }
 
+    /**
+     * @param string $confirmationCode
+     *
+     * @return User
+     */
+    public function setConfirmationCode(string $confirmationCode): self
+    {
+        $this->confirmationCode = $confirmationCode;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     *
+     * @return User
+     */
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
+
+        return $this;
+    }
 
 
 }
