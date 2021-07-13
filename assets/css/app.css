@@ -1,6 +1,48 @@
 /* assets/css/app.css */
 
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #1b1e21;
+    color: #fff;
+    height: 50px;
+}
+
+.header .menu {
+    width: 50%;
+    padding: 0;
+}
+
+.ul-menu {
+    list-style: none;
+}
+
+.ul-menu li {
+    color: #fff;
+    text-decoration: none;
+    float: left;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.ul-menu li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.ul-menu li a:hover, .ul-menu li a:active{
+    text-decoration: none;
+    color: #e0e0e0;
+}
+
 .wrapper{
     width: 50%;
-    margin: 50px auto;
+    margin: 100px auto;
 }
