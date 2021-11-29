@@ -1,10 +1,25 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ post.title }} {% endblock %}
+
 {% block body %}
     <p><a href="{{ path('blog_posts') }}">< Вернуться к постам</a></p>
-    <p><a class="btn btn-warning" href="{{ path('blog_post_edit', {'slug': post.slug}) }}">Редактировать</a></p>
-    <p><a class="btn btn-danger" href="{{ path('blog_post_delete', {'slug': post.slug}) }}">Удалить</a></p>
-    <p>id: {{ post.id }}</p>
-    <p>title: {{ post.title }}</p>
-    <p>text: {{ post.body }}</p>
+    <p><a class="btn btn-warning" href="{{ path('blog_post_edit', {'slug': post.slug}) }}">Редактировать</a>
+        <a class="btn btn-danger" href="{{ path('blog_post_delete', {'slug': post.slug}) }}">Удалить</a>
+    </p>
+    <h2> {{ post.title }}(title)</h2>
+    <p><b>id:</b> {{ post.id }}</p>
+    <p>{{ post.body }}</p>
+
+    <div>
+        {{ form_start(form) }}
+        {{ form_row(form.comment) }}
+        <button type="submit" class="btn btn-primary">Отправить</button>
+        {{ form_end(form) }}
+    </div>
+    <div>
+        {% for comment in post.comments %}
+            <p>{{ comment.comment }}</p>
+        {% endfor %}
+    </div>
 {% endblock %}

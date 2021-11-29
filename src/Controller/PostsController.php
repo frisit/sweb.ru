@@ -125,17 +125,6 @@ class PostsController extends AbstractController
     /**
      * @Route("/posts/{slug}", name="blog_show")
      * */
-    public function show(Post $post)
-    {
-
-        return $this->render('posts/show.html.twig', [
-            'post' => $post
-        ]);
-    }
-
-    /**
-     * @Route("/posts_com/{slug}", name="comment_new")
-     */
     public function commentNew(Post $post, Request $request, LoggerInterface $logger)
     {
         $comment = new Comment();
@@ -150,13 +139,13 @@ class PostsController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();
-            $logger->notice(var_dump($comment));
-            $logger->notice(var_dump($form));
+//            $logger->notice(var_dump($comment));
+//            $logger->notice(var_dump($form));
 
-            return $this->redirectToRoute('comment_new', ['slug' => $post->getSlug()]);
+            return $this->redirectToRoute('blog_show', ['slug' => $post->getSlug()]);
         }
 
-        return $this->render('posts/show_com.html.twig', [
+        return $this->render('posts/show.html.twig', [
             'post' => $post,
             'form' => $form->createView()
         ]);
