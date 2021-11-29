@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Cocur\Slugify\Slugify;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,8 +33,8 @@ class PostsController extends AbstractController
     public function posts()
     {
         // Первый способ вывода записей без внедрения PostRepository через конструктор
-         $repo = $this->getDoctrine()->getRepository(Post::class);
-         $posts = $repo->findAll();
+        $repo = $this->getDoctrine()->getRepository(Post::class);
+        $posts = $repo->findAll();
 
         // Второй способ вывода записей через внедрение PostRepository
 //        $posts = $this->postRepository->findAll();
@@ -123,10 +127,38 @@ class PostsController extends AbstractController
      * */
     public function show(Post $post)
     {
+
         return $this->render('posts/show.html.twig', [
             'post' => $post
         ]);
     }
 
+    /**
+     * @Route("/posts_com/{slug}", name="comment_new")
+     */
+    public function commentNew(Post $post, Request $request, LoggerInterface $logger)
+    {
+        $comment = new Comment();
+        $comment->setUser($this->getUser());
+        $post->addComment($comment);
 
+        $form = $this->createForm(CommentType::class, $comment);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+            $logger->notice(var_dump($comment));
+            $logger->notice(var_dump($form));
+
+            return $this->redirectToRoute('comment_new', ['slug' => $post->getSlug()]);
+        }
+
+        return $this->render('posts/show_com.html.twig', [
+            'post' => $post,
+            'form' => $form->createView()
+        ]);
+    }
 }

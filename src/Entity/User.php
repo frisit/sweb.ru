@@ -3,6 +3,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -64,6 +65,13 @@ class User implements UserInterface
      * */
     private $enabled;
 
+    /**
+     * @var Comment[]
+     *
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user")
+     */
+    private $comments;
+
 
     /**
      * User constructor.
@@ -72,8 +80,8 @@ class User implements UserInterface
     {
         $this->roles = [self::ROLE_USER];
         $this->enabled = false;
+        $this->comments = new ArrayCollection();
     }
-
 
     /**
      * @return array

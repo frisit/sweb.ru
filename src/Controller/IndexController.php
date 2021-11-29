@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+/**
+* @ApiResource()
+ * */
 class IndexController extends AbstractController
 {
     /**

@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Comment;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
@@ -42,6 +44,17 @@ class Post
      */
     private $created_at;
 
+    /**
+     * @var Comment[]
+     *
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="post")
+     */
+    private $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -112,15 +125,22 @@ class Post
         $this->created_at = $created_at;
     }
 
+    public function addComment(Comment $comment): void
+    {
+        $comment->setPost($this);
 
+        if(!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+        }
+    }
 
+    public function removeComment(Comment $comment): void
+    {
+        $this->comments->removeElement($comment);
+    }
 
-
-
-
-
-
-
-
-
+    public function getComments()
+    {
+        return $this->comments;
+    }
 }
