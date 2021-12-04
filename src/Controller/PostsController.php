@@ -50,14 +50,13 @@ class PostsController extends AbstractController
      */
     public function addPost(Request $request, Slugify $slugify)
     {
-        $post = new Post();
+        $post = Post::fromDraft($this->getUser());
 
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post->setSlug($slugify->slugify($post->getTitle()));
-            $post->setCreatedAt(new \DateTime());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
@@ -113,7 +112,7 @@ class PostsController extends AbstractController
     public function search(Request $request)
     {
         $query = $request->query->get('queue');
-        $posts = $this->postRepository->searchByQuery($query);
+        $posts = $this->postRepository->findOneBySlug($query);
 
         return $this->render('posts/query_post.html.twig', [
             'posts' => $posts
@@ -127,27 +126,30 @@ class PostsController extends AbstractController
      * */
     public function commentNew(Post $post, Request $request, LoggerInterface $logger)
     {
-        $comment = new Comment();
-        $comment->setUser($this->getUser());
-        $post->addComment($comment);
+        if($this->getUser() !== null) {
+            $comment = new Comment();
+            $comment->setUser($this->getUser());
+            $post->addComment($comment);
 
-        $form = $this->createForm(CommentType::class, $comment);
+            $form = $this->createForm(CommentType::class, $comment);
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($comment);
+                $em->flush();
 //            $logger->notice(var_dump($comment));
 //            $logger->notice(var_dump($form));
 
-            return $this->redirectToRoute('blog_show', ['slug' => $post->getSlug()]);
+                return $this->redirectToRoute('blog_show', ['slug' => $post->getSlug()]);
+            }
         }
+
 
         return $this->render('posts/show.html.twig', [
             'post' => $post,
-            'form' => $form->createView()
+            'form' => isset($form) ? $form->createView() : null
         ]);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Repository;
 
-use App\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use App\Entity\Category;
 
-class PostRepository
+class CategoryRepository
 {
     /**
      * @var EntityManagerInterface
@@ -21,16 +21,16 @@ class PostRepository
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->repository = $em->getRepository(Post::class);
+        $this->repository = $em->getRepository(Category::class);
     }
 
-    public function add(Post $post)
+    public function add(Category $category)
     {
-        $this->em->persist($post);
+        $this->em->persist($category);
     }
 
-    public function findOneBySlug(string $slug)
+    public function findOneByName(string $name)
     {
-        return $this->repository->findOneBy(['slugg' => $slug]);
+
     }
 }
