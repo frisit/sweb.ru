@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Web;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
