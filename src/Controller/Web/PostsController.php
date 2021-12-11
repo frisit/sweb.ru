@@ -12,7 +12,6 @@ use App\Repository\PostRepository;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,9 +27,10 @@ class PostsController extends AbstractController
     }
 
     /**
-     * @Route("/posts", name="blog_posts")
-     * */
-    public function posts()
+     * @Route("/web/posts", name="blog_posts")
+     * @return Response
+     */
+    public function posts(): Response
     {
         // Первый способ вывода записей без внедрения PostRepository через конструктор
         $repo = $this->getDoctrine()->getRepository(Post::class);
