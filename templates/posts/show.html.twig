@@ -11,6 +11,7 @@
     <p><b>id:</b> {{ post.id }}</p>
     <p>{{ post.body }}</p>
 
+    {% if form %}
     <div>
         {{ form_start(form) }}
         {{ form_row(form.comment) }}
@@ -22,4 +23,5 @@
             <p>{{ comment.comment }}</p>
         {% endfor %}
     </div>
+    {% endif %}
 {% endblock %}
