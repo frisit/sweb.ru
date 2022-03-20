@@ -6,12 +6,16 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Event\EventDispatcher;
+use App\Event\RequestEvent;
+use App\Event\RequestSubscriber;
 use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,10 +32,17 @@ class PostsController extends AbstractController
 
     /**
      * @Route("/posts", name="blog_posts")
-     * @return Response
-     */
-    public function posts(): Response
+     * */
+    public function posts()
     {
+        // TODO: сделать вывод в лог информацию об открытии страницы
+        $dispatcher = new EventDispatcher();;
+        $dispatcher->addSubscriber(new RequestSubscriber());
+
+        $dispatcher->dispatch(new RequestEvent(new \stdClass(), [
+            'name' => 'Page was opened'
+        ]));
+
         // Первый способ вывода записей без внедрения PostRepository через конструктор
         $repo = $this->getDoctrine()->getRepository(Post::class);
         $posts = $repo->findAll();
@@ -50,7 +61,7 @@ class PostsController extends AbstractController
      */
     public function addPost(Request $request, Slugify $slugify)
     {
-        $post = Post::fromDraft($this->getUser());
+        $post = new Post();
 
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
@@ -126,7 +137,7 @@ class PostsController extends AbstractController
      * */
     public function commentNew(Post $post, Request $request, LoggerInterface $logger)
     {
-        if($this->getUser() !== null) {
+        if ($this->getUser() !== null) {
             $comment = new Comment();
             $comment->setUser($this->getUser());
             $post->addComment($comment);
@@ -139,13 +150,12 @@ class PostsController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($comment);
                 $em->flush();
-//            $logger->notice(var_dump($comment));
-//            $logger->notice(var_dump($form));
+                //            $logger->notice(var_dump($comment));
+                //            $logger->notice(var_dump($form));
 
                 return $this->redirectToRoute('blog_show', ['slug' => $post->getSlug()]);
             }
         }
-
 
         return $this->render('posts/show.html.twig', [
             'post' => $post,
