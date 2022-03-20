@@ -6,6 +6,9 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Event\EventDispatcher;
+use App\Event\RequestEvent;
+use App\Event\RequestSubscriber;
 use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
@@ -32,6 +35,14 @@ class PostsController extends AbstractController
      * */
     public function posts()
     {
+        // TODO: сделать вывод в лог информацию об открытии страницы
+        $dispatcher = new EventDispatcher();;
+        $dispatcher->addSubscriber(new RequestSubscriber());
+
+        $dispatcher->dispatch(new RequestEvent(new \stdClass(), [
+            'name' => 'Page was opened'
+        ]));
+
         // Первый способ вывода записей без внедрения PostRepository через конструктор
         $repo = $this->getDoctrine()->getRepository(Post::class);
         $posts = $repo->findAll();
@@ -126,7 +137,7 @@ class PostsController extends AbstractController
      * */
     public function commentNew(Post $post, Request $request, LoggerInterface $logger)
     {
-        if($this->getUser() !== null) {
+        if ($this->getUser() !== null) {
             $comment = new Comment();
             $comment->setUser($this->getUser());
             $post->addComment($comment);
