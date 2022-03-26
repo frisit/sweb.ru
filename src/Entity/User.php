@@ -8,15 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\Post\Comment;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(name="user")
+ * @ORM\Table(name="users")
  * @UniqueEntity(fields={"email"}, message="Увас уже есть аккаунт")
  * */
 class User implements UserInterface
 {
-    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_VIEWER = 'viewer';
 
     /**
      * @ORM\Id()

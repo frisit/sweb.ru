@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Post;
 
-use App\Repository\PostRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\Comment;
+use App\Entity\Post\Comment;
+use App\Entity\User;
 use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="posts")
+ * @ORM\Table(name="post")
  */
 class Post
 {
@@ -55,7 +55,7 @@ class Post
 
     /**
      * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="App\Entity\Category", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\Post\Category", cascade={"persist"})
      * @ORM\JoinTable(name="post_categories")
      * @ORM\JoinColumn(referencedColumnName="id", nullable=false)
      */

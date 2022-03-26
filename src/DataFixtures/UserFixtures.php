@@ -9,7 +9,7 @@ use Faker\Factory;
 
 class UserFixtures extends Fixture
 {
-    public const USER_REFERENCE = 'user';
+    public const USER_REFERENCE = 'users';
     public $faker;
 
     public function __construct()

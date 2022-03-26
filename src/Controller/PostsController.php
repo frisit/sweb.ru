@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Comment;
-use App\Entity\Post;
+use App\Entity\Post\Comment;
+use App\Entity\Post\Post;
 use App\Event\EventDispatcher;
 use App\Event\RequestEvent;
 use App\Event\RequestSubscriber;
 use App\Form\CommentType;
 use App\Form\PostType;
-use App\Repository\PostRepository;
+use App\Repository\Post\PostRepository;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

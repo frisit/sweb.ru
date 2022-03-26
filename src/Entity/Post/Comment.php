@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Entity\Post;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Post;
+use App\Entity\Post\Post;
 use App\Entity\User;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(name="comment")
  */
 class Comment
 {

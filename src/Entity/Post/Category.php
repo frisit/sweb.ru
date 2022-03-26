@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Post;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="categories")
+ * @ORM\Table(name="category")
  */
 class Category
 {
