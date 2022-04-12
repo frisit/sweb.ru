@@ -90,6 +90,7 @@ class Post
     {
         $this->id = Uuid::uuid4();
         $this->created_at = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Moscow'));
+        $this->status = self::DRAFT;
         $this->comments = new ArrayCollection();
     }
 
@@ -180,7 +181,8 @@ class Post
         User $user,
         ?string $title = null,
         ?string $body = null,
-        ?string $slug = null
+        ?string $slug = null,
+        ?Category $category = null
     ): Post {
         $post = new self();
         $post->title = $title;
@@ -189,6 +191,7 @@ class Post
         $post->user = $user;
         $post->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Moscow'));
         $post->status = self::DRAFT;
+        $post->categories[] = $category;
 
         return $post;
     }

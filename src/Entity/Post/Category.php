@@ -35,13 +35,13 @@ class Category
     {
         $this->id = Uuid::uuid4();
         $this->name = $name;
-        $this->date = new \DateTimeImmutable('now', new \DateTimeZone('Europe\Moscow'));
+        $this->date = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Moscow'));
     }
 
     /**
      * @return Uuid
      */
-    public function getId(): Uuid
+    public function getId(): string
     {
         return $this->id;
     }

@@ -79,7 +79,7 @@ class User implements UserInterface
      */
     public function __construct()
     {
-        $this->roles = [self::ROLE_USER];
+        $this->roles = [self::ROLE_VIEWER];
         $this->enabled = false;
         $this->comments = new ArrayCollection();
     }

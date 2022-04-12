@@ -15,7 +15,6 @@ use App\Repository\Post\PostRepository;
 use Cocur\Slugify\Slugify;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -25,6 +24,10 @@ class PostsController extends AbstractController
     /** @var PostRepository $postRepository */
     private $postRepository;
 
+    /**
+     * PostsController constructor.
+     * @param PostRepository $postRepository
+     */
     public function __construct(PostRepository $postRepository)
     {
         $this->postRepository = $postRepository;
@@ -32,7 +35,7 @@ class PostsController extends AbstractController
 
     /**
      * @Route("/posts", name="blog_posts")
-     * */
+     */
     public function posts()
     {
         // TODO: сделать вывод в лог информацию об открытии страницы
@@ -150,8 +153,6 @@ class PostsController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($comment);
                 $em->flush();
-                //            $logger->notice(var_dump($comment));
-                //            $logger->notice(var_dump($form));
 
                 return $this->redirectToRoute('blog_show', ['slug' => $post->getSlug()]);
             }
